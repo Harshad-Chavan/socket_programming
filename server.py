@@ -1,6 +1,6 @@
 
 import socket
-
+mesg_list = ["hi"]
 try:
     socket_obj = socket.socket()
     print("socket created succesfully")
@@ -12,8 +12,19 @@ try:
 
     while True:
         c, address = socket_obj.accept()
-        c.send(b"Thanks for connecting")
-        c.close()
+        client_ip = c.recv(1024)
+        print("{0} has connected".format(client_ip.decode()))
+        c.send(("welcome to the chat bot").encode())
+        while True:
+            x = c.recv(1024)
+            if x.decode() == "bye":
+                c.send(("see you soon bye !!").encode())
+                print("{0} has dis-connected".format(client_ip.decode()))
+                c.close()
+                break
+            rev_x = x.decode()[::-1]
+            c.send(rev_x.encode())
+        break
 
 except Exception as e:
     print(e)
